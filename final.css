@@ -14,7 +14,7 @@ header, footer {
 
 nav {
     display: flex;
-    justify-content: center;
+    justify-content: left;
     background-color: #555;
 }
 
