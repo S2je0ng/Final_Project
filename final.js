@@ -10,6 +10,25 @@ const data = {
     voc: 10
 };
 
+var xhr = new XMLHttpRequest();
+var url = 'http://apis.data.go.kr/6260000/AirQualityInfoService/getAirQualityInfoClassifiedByStation'; /*URL*/
+var queryParams = '?' + encodeURIComponent('serviceKey') + '=' + '서비스키'; /*Service Key*/
+queryParams += '&' + encodeURIComponent('pageNo' + '=' + encodeURIComponent('페이지번호')); /*페이지번호*/
+queryParams += '&' + encodeURIComponent('numOfRows' + '=' + encodeURIComponent('한 페이지 결과 수')); /*한 페이지 결과 수*/
+queryParams += '&' + encodeURIComponent('resultType' + '=' + encodeURIComponent('JSON방식으로 호출 시 파라미터 resultType=json 입력')); /*JSON방식으로 호출 시 파라미터 resultType=json 입력*/
+queryParams += '&' + encodeURIComponent('areaIndex' + '=' + encodeURIComponent('측정소코드')); /*측정소코드*/
+queryParams += '&' + encodeURIComponent('controlnumber' + '=' + encodeURIComponent('측정시간')); /*측정시간*/
+xhr.open('GET', url + queryParams);
+xhr.onreadystatechange = function () {
+    if (this.readyState == 4) {
+        alert('Status: '+this.status+'nHeaders: '+JSON.stringify(this.getAllResponseHeaders())+'nBody: '+this.responseText);
+    }
+};
+
+xhr.send('');
+
+
+
 // Update data values on page load
 document.getElementById("temperature").textContent = `${data.temperature}°C`;
 document.getElementById("humidity").textContent = `${data.humidity}%`;
