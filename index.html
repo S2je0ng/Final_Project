@@ -8,79 +8,57 @@
     <script src="final.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
+
 <body>
-    <header>
-        <h1>Air Quality Monitoring Dashboard</h1>
-    </header>
+    <main>
+        <!-- title 작성 -->
+        <header>
+            <h1>Air Quality Monitoring Dashboard</h1>
+        </header>
 
-    <div id="nav">
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#data">Data</a></li>
-            <li><a href="#about">About</a></li>
-        </ul>
-    </div>
-    
+        <!-- home, data, about link 작성 -->
+        <div id="nav">
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#data">Data</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+        </div>
 
-    <main id="dashboard">
-        <section class="data-cards">
-            <div class="card">
-                <h3>Temperature</h3>
-                <p id="temperature">25°C</p>
+
+        <!-- main dashboard 작성 -->
+        <section id="dashboard">
+            <div id="data-cards">
+                <!-- Data Cards for Dynamic Content -->
+                <div class="card">
+                    <h3>PM2.5</h3>
+                    <p id="pm25">Loading...</p>
+                </div>
+                <div class="card">
+                    <h3>PM10</h3>
+                    <p id="pm10">Loading...</p>
+                </div>
+                <div class="card">
+                    <h3>CO2</h3>
+                    <p id="co2">Loading...</p>
+                </div>
+                <div class="card">
+                    <h3>SO2</h3>
+                    <p id="so2">Loading...</p>
+                </div>
             </div>
-
-            <div class="card">
-                <h3>Humidity</h3>
-                <p id="humidity">45%</p>
-            </div>
-
-            <div class="card">
-                <h3>PM2.5</h3>
-                <p id="pm25">30 µg/m³</p>
-            </div>
-
-            <div class="card">
-                <h3>PM10</h3>
-                <p id="pm25">30 µg/m³</p>
-            </div>
-
-            <div class="card">
-                <h3>NOx</h3>
-                <p id="pm25">30 ppb</p>
-            </div>
-
-            <div class="card">
-                <h3>NH3</h3>
-                <p id="pm25">30 ppb</p>
-            </div>
-
-            <div class="card">
-                <h3>CO2</h3>
-                <p id="pm25">30 ppm</p>
-            </div>
-
-            <div class="card">
-                <h3>SO2</h3>
-                <p id="pm25">30 ppb</p>
-            </div>
-
-            <div class="card">
-                <h3>VOC</h3>
-                <p id="pm25">30 ppb</p>
-            </div>
-  
-        </section>
-
-        <section class="charts">
-            <canvas id="lineChart"></canvas>
-            <canvas id="barChart"></canvas>
         </section>
     </main>
-
+    
     <footer>
-        <p> PARK SEJEONG FINAL PROJECT </p>
+        <!-- 참고사이트 작성 -->
+        <ul id="cf">
+            <li> <a href=""> 참고 사이트 명 작성 </a></li>
+        </ul>
     </footer>
 
-    <script src="script.js"></script>
 </body>
+
+
 </html>
