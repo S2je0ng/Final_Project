@@ -6,59 +6,64 @@
     <title>Air Quality Monitoring Dashboard</title>
     <link rel="stylesheet" href="final.css">
     <script src="final.js"></script>
+    <script src="temp.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 
 <body>
-    <main>
-        <!-- title 작성 -->
-        <header>
-            <h1>Air Quality Monitoring Dashboard</h1>
-        </header>
-
-        <!-- home, data, about link 작성 -->
-        <div id="nav">
+    <header>
+        <h1>Air Quality Monitoring Dashboard</h1>
+        <nav>
             <ul>
                 <li><a href="#home">Home</a></li>
                 <li><a href="#data">Data</a></li>
                 <li><a href="#about">About</a></li>
             </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="selectors">
+            <label for="citySelect">City:</label>
+            <select id="citySelect">
+                <option value="">Select a city</option>
+                <option value="서울">서울</option>
+                <option value="부산">부산</option>
+                <option value="인천">인천</option>
+                <option value="대구">대구</option>
+                <option value="광주">광주</option>
+            </select>
+
+            <label for="districtSelect">District:</label>
+            <select id="districtSelect" disabled>
+                <option value="">Select a district</option>
+            </select>
+
         </div>
+        <div class="charts-container">
 
-
-        <!-- main dashboard 작성 -->
-        <section id="dashboard">
-            <div id="data-cards">
-                <!-- Data Cards for Dynamic Content -->
-                <div class="card">
-                    <h3>PM2.5</h3>
-                    <p id="pm25">Loading...</p>
-                </div>
-                <div class="card">
-                    <h3>PM10</h3>
-                    <p id="pm10">Loading...</p>
-                </div>
-                <div class="card">
-                    <h3>CO2</h3>
-                    <p id="co2">Loading...</p>
-                </div>
-                <div class="card">
-                    <h3>SO2</h3>
-                    <p id="so2">Loading...</p>
-                </div>
+            <div class="chart-box">
+                <canvas id="lineChart"></canvas>
             </div>
-        </section>
+
+            <div class="chart-box">
+                <canvas id="barChart"></canvas>
+            </div>
+
+            <div class="chart-box small-chart">
+                <canvas id="doughnutChart"></canvas>
+            </div>
+
+        </div>
     </main>
-    
+
     <footer>
-        <!-- 참고사이트 작성 -->
-        <ul id="cf">
+        <p>Data provided by 한국환경공단</p>
+         <!-- 참고사이트 작성 -->
+         <ul id="cf">
             <li> <a href=""> 참고 사이트 명 작성 </a></li>
         </ul>
     </footer>
-
-</body>
-
 
 </html>

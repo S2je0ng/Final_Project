@@ -1,109 +1,98 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const citySelect = document.getElementById("citySelect");
+    const districtSelect = document.getElementById("districtSelect");
+    const districtsByCity = {
+        "서울": ["강남구", "동대문구", "마포구", "서초구", "송파구", "종로구"],
+        "부산": ["전포동", "온천동", "대연동", "연산동", "부곡동", "광안동"],
+        "인천": ["석모리", "덕적도", "백령도", "영흥", "연평도", "구월동"],
+        "대구": ["지산동", "수창동", "서호동", "시지동", "이곡동", "호림동"],
+        "광주": ["서석동", "노대동", "유촌동", "두암동", "운암동", "일곡동"]
+    };
 
-var xhr = new XMLHttpRequest();
-var url = 'http://apis.data.go.kr/6260000/AirQualityInfoService/getAirQualityInfoClassifiedByStation'; // API URL
-var queryParams = '?' + encodeURIComponent('serviceKey') + '=' + 'dbXskZIbi2s80pFXM%2BtjJW%2BIjZoGolDZw1Sx4FbEmm86VR0GJcF1tgpxBwGROZTitGqKByf2Duim7WoCWlDERA%3D%3D'; // Replace with your actual service key
-queryParams += '&' + encodeURIComponent('pageNo') + '=' + encodeURIComponent('1'); // 페이지 번호
-queryParams += '&' + encodeURIComponent('numOfRows') + '=' + encodeURIComponent('10'); // 한 페이지 결과 수
-queryParams += '&' + encodeURIComponent('resultType') + '=' + encodeURIComponent('json'); // JSON 형식
-queryParams += '&' + encodeURIComponent('areaIndex') + '=' + encodeURIComponent('측정소코드'); // 측정소 코드
-queryParams += '&' + encodeURIComponent('controlnumber') + '=' + encodeURIComponent('측정시간'); // 측정 시간
+    let barChartInstance = null;
+    let doughnutChartInstance = null;
 
-console.log(url+queryParams);
+    citySelect.addEventListener("change", () => {
+        const city = citySelect.value;
+        if (city && districtsByCity[city]) {
+            districtSelect.innerHTML = `<option value="">Select a district</option>`;
+            districtsByCity[city].forEach(district => {
+                const option = document.createElement("option");
+                option.value = district;
+                option.textContent = district;
+                districtSelect.appendChild(option);
+            });
+            districtSelect.disabled = false;
 
-xhr.open('GET', url + queryParams);
-xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4) { // 요청이 완료되었을 때
-        if (xhr.status === 200) { // 성공적으로 응답을 받았을 때
-            console.log('Response:', JSON.parse(xhr.responseText)); // JSON 데이터를 콘솔에 출력
-        } else { // 에러가 발생했을 때
-            console.error('Error:', xhr.status, xhr.statusText);
+        } else {
+            districtSelect.innerHTML = `<option value="">Select a district</option>`;
+            districtSelect.disabled = true;
         }
+    });
+
+    districtSelect.addEventListener("change", () => {
+        const city = citySelect.value;
+        const district = districtSelect.value;
+        if (city && district) {
+            fetchData(city, district);
+        }
+    });
+
+    function fetchData(city, district) {
+        const url = `http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty`;
+        const serviceKey = 'dbXskZIbi2s80pFXM%2BtjJW%2BIjZoGolDZw1Sx4FbEmm86VR0GJcF1tgpxBwGROZTitGqKByf2Duim7WoCWlDERA%3D%3D'; // Replace with your actual service key
+        const queryParams = `?serviceKey=${serviceKey}&returnType=json&numOfRows=100&pageNo=1&sidoName=${encodeURIComponent(city)}&ver=1.0`;
+
+        fetch(url + queryParams)
+            .then(response => response.json())
+            .then(data => {
+                if (data.response.body && data.response.body.items) {
+                    const filteredData = data.response.body.items.filter(item => item.stationName === district);
+                    if (filteredData.length > 0) {
+                        updateCharts(filteredData[0]);
+                    } 
+                } 
+            })
     }
-};
-xhr.send();
 
-// Update Dashboard Data and Charts
-function updateDashboard(data) {
-    // Update Table
-    document.getElementById('so2').textContent = data.so2 || 'N/A';
-    document.getElementById('no2').textContent = data.no2 || 'N/A';
-    document.getElementById('o3').textContent = data.o3 || 'N/A';
-    document.getElementById('co').textContent = data.co || 'N/A';
-    document.getElementById('pm25').textContent = data.pm25 || 'N/A';
-    document.getElementById('pm10').textContent = data.pm10 || 'N/A';
+    function updateCharts(data) {
+        updateBarChart(data);
+        updateDoughnutChart(data);
+    }
 
-    // Update Charts
-    createBarChart(data);
-    createDoughnutChart(data);
-}
-
-// Create Bar Chart
-function createBarChart(data) {
-    var ctx = document.getElementById('barChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['SO2', 'NO2', 'O3', 'CO', 'PM2.5', 'PM10'],
-            datasets: [{
-                label: 'Pollutant Levels',
-                data: [data.so2, data.no2, data.o3, data.co, data.pm25, data.pm10],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: { beginAtZero: true }
-            }
+    function updateBarChart(data) {
+        const ctx = document.getElementById("barChart").getContext("2d");
+        if (barChartInstance) {
+            barChartInstance.destroy();
         }
-    });
-}
+        barChartInstance = new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: ["PM2.5", "PM10", "NO₂", "CO", "SO₂"],
+                datasets: [{
+                    label: "Pollutant Levels",
+                    data: [data.pm25Value, data.pm10Value, data.no2Value, data.coValue, data.so2Value],
 
-// Create Doughnut Chart
-function createDoughnutChart(data) {
-    var ctx = document.getElementById('doughnutChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['SO2', 'NO2', 'O3', 'CO', 'PM2.5', 'PM10'],
-            datasets: [{
-                data: [data.so2, data.no2, data.o3, data.co, data.pm25, data.pm10],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ]
-            }]
-        },
-        options: {
-            responsive: true
+                    backgroundColor: [ "pink", "grey","green", "skyblue","purple"]
+                }]
+            },
+        });
+    }
+
+    function updateDoughnutChart(data) {
+        const ctx = document.getElementById("doughnutChart").getContext("2d");
+        if (doughnutChartInstance) {
+            doughnutChartInstance.destroy();
         }
-    });
-}
-
-// Event Listener for Region Selection
-document.getElementById('regionSelect').addEventListener('change', function (event) {
-    const stationCode = event.target.value;
-    if (stationCode) {
-        fetchData(stationCode); // Fetch data when a region is selected
+        doughnutChartInstance = new Chart(ctx, {
+            type: "doughnut",
+            data: {
+                labels: ["PM2.5", "PM10", "NO₂", "CO", "SO₂"],
+                datasets: [{
+                    data: [data.pm25Value, data.pm10Value, data.no2Value, data.coValue, data.so2Value],
+                    backgroundColor: [ "pink", "grey","green", "skyblue","purple"]
+                }]
+            },
+        });
     }
 });
