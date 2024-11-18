@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function fetchData(city) {
         const cityId = cityIds[city];
 
-        const url = `http://apis.data.go.kr/1360000/AsosHourlyInfoService/getWthrDataList`;
+        const url = `https://apis.data.go.kr/1360000/AsosHourlyInfoService/getWthrDataList`;
         const serviceKey = `dbXskZIbi2s80pFXM%2BtjJW%2BIjZoGolDZw1Sx4FbEmm86VR0GJcF1tgpxBwGROZTitGqKByf2Duim7WoCWlDERA%3D%3D`;
         const queryParams = `?serviceKey=${serviceKey}&numOfRows=24&pageNo=1&dataCd=ASOS&dateCd=HR&stnIds=${cityId}&startDt=20241116&startHh=00&endDt=20241117&endHh=23&dataType=JSON`;
 

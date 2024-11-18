@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // fetch data js형식
     function fetchData(city, district) {
-        const url = `http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty`;
+        const url = `https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty`;
         const serviceKey = 'dbXskZIbi2s80pFXM%2BtjJW%2BIjZoGolDZw1Sx4FbEmm86VR0GJcF1tgpxBwGROZTitGqKByf2Duim7WoCWlDERA%3D%3D'; // Replace with your actual service key
         const queryParams = `?serviceKey=${serviceKey}&returnType=json&numOfRows=100&pageNo=1&sidoName=${encodeURIComponent(city)}&ver=1.0`;
 
