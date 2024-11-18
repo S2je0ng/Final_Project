@@ -9,17 +9,20 @@ document.addEventListener("DOMContentLoaded", () => {
         "광주": ["서석동", "노대동", "유촌동", "두암동", "운암동", "일곡동"]
     };
 
-    let barChartInstance = null;
-    let doughnutChartInstance = null;
+    let barChart= null;
+    let doughnutChart = null;
 
     citySelect.addEventListener("change", () => {
         const city = citySelect.value;
+
         if (city && districtsByCity[city]) {
             districtSelect.innerHTML = `<option value="">Select a district</option>`;
             districtsByCity[city].forEach(district => {
+
                 const option = document.createElement("option");
                 option.value = district;
                 option.textContent = district;
+                
                 districtSelect.appendChild(option);
             });
             districtSelect.disabled = false;
@@ -56,11 +59,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateCharts(data) {
-        updateBarChart(data);
-        updateDoughnutChart(data);
+        barChart(data);
+        doughnutChart(data);
     }
 
-    function updateBarChart(data) {
+    function barChart(data) {
         const ctx = document.getElementById("barChart").getContext("2d");
         if (barChartInstance) {
             barChartInstance.destroy();
@@ -79,10 +82,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    function updateDoughnutChart(data) {
+    function doughnutChart(data) {
         const ctx = document.getElementById("doughnutChart").getContext("2d");
-        if (doughnutChartInstance) {
-            doughnutChartInstance.destroy();
+        if (doughnutChart) {
+            doughnutChart.destroy();
         }
         doughnutChartInstance = new Chart(ctx, {
             type: "doughnut",
