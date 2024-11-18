@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    let lineChartInstance = null;
+    let lineChart = null;
 
     const cityIds = {
         "서울": "108",
@@ -18,13 +18,13 @@ document.addEventListener("DOMContentLoaded", () => {
         "광주": "156"
     };
 
-    // API 호출 및 데이터 처리
+    // fetch data
     function fetchData(city) {
-        const stnId = cityIds[city];
+        const cityId = cityIds[city];
 
         const url = `http://apis.data.go.kr/1360000/AsosHourlyInfoService/getWthrDataList`;
         const serviceKey = `dbXskZIbi2s80pFXM%2BtjJW%2BIjZoGolDZw1Sx4FbEmm86VR0GJcF1tgpxBwGROZTitGqKByf2Duim7WoCWlDERA%3D%3D`;
-        const queryParams = `?serviceKey=${serviceKey}&numOfRows=24&pageNo=1&dataCd=ASOS&dateCd=HR&stnIds=${stnId}&startDt=20241116&startHh=00&endDt=20241117&endHh=23&dataType=JSON`;
+        const queryParams = `?serviceKey=${serviceKey}&numOfRows=24&pageNo=1&dataCd=ASOS&dateCd=HR&stnIds=${cityId}&startDt=20241116&startHh=00&endDt=20241117&endHh=23&dataType=JSON`;
 
         console.log(url + queryParams);
 
@@ -56,11 +56,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateLineChart(labels, temp, humidities) {
         const ctx = document.getElementById("lineChart").getContext("2d");
 
-        if (lineChartInstance) {
-            lineChartInstance.destroy();
+        if (lineChart) {
+            lineChart.destroy();
         }
 
-        lineChartInstance = new Chart(ctx, {
+        lineChart = new Chart(ctx, {
             type: "line",
             data: {
                 labels: labels,
