@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         barChart = new Chart(canvas, {
             type: "bar",
             data: {
-                labels: ["PM2.5", "PM10", "NO₂", "CO", "SO₂"],
+                labels: ["PM2.5", "PM10", "NO₂", "CO", "SO₂", "O3"],
                 datasets: [{
                     label: "Pollutant Levels",
                     data: [data.pm25Value, data.pm10Value, data.no2Value, data.coValue, data.so2Value],
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
         doughnutChart = new Chart(canvas, {
             type: "doughnut",
             data: {
-                labels: ["PM2.5", "PM10", "NO₂", "CO", "SO₂"],
+                labels: ["PM2.5", "PM10", "NO₂", "CO", "SO₂", "O3"],
                 datasets: [{
                     data: [data.pm25Value, data.pm10Value, data.no2Value, data.coValue, data.so2Value],
                     backgroundColor: [ "pink", "grey","green", "skyblue","purple"]
