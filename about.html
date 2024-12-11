@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About</title>
+    <link rel="stylesheet" href="final.css">
+</head>
+
+<style>
+    /* 아코디언 스타일 */
+    .accordion {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+        padding: 10px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .accordion:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+        text-decoration: none;
+    }
+
+    .accordion.active {
+        background-color: rgba(255, 255, 255, 0.8);
+        color: steelblue;
+    }
+
+    .accordion .icon {
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    .panel {
+        display: none;
+        /* border-left: 3px solid #4682b4; */
+        padding: 5px 15px;
+        margin-top: 5px;
+        /* background-color: rgba(70, 131, 180, 0.2); */
+    }
+
+    .panel a {
+        display: block;
+        color: #333;
+        text-decoration: none;
+        padding: 5px 0;
+        transition: color 0.3s;
+    }
+
+    .panel a:hover {
+        color: steelblue;
+        font-weight: bold;
+    }
+
+
+    /* 추가 스타일 */
+    .about-container {
+            max-width: 1000px; /* 박스 크기 확대 */
+            margin: 50px auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            text-align: left;
+        }
+
+        .about-container h2 {
+            font-size: 2.2rem;
+            color: steelblue;
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .about-container p {
+            font-size: 1.1rem;
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .about-container a.github-link {
+            display: inline-block;
+            font-size: 1.1rem;
+            color: white;
+            background-color: steelblue;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .about-container a.github-link:hover {
+            background-color: #4682b4;
+        }
+
+</style>
+
+<body>
+    <header>
+        <h1 class="site-title">Air Quality Monitoring</h1>
+    </header>
+
+    <div class="main-container">
+        <aside id="sideMenu">
+            <nav>
+                <ul>
+                    <li><a href="./index.html" >HOME</a></li>
+                    <a href="javascript:void(0);" class="accordion">DATA<span class="icon">v</span></a>
+                    <ul class="panel">
+                        <li><a href="temp.html">Temperature</a></li>
+                        <li><a href="airqulity.html">Air Quality</a></li>
+                    </ul>
+                    </li>
+                    <li><a href="./about.html" class="active">ABOUT</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main>
+            
+            <div class="about-container">
+                <h2>About Air Quality Monitoring Dashboard</h2>
+                <p>
+                    The <strong>Air Quality Monitoring Dashboard</strong> is a web application designed to provide real-time 
+                    environmental data including temperature, humidity, and air quality levels. By leveraging public APIs, 
+                    the dashboard helps users monitor and understand their surrounding environment.
+                </p>
+                <p>
+                    The data is sourced from trusted public APIs such as the Korea Meteorological Administration and AirKorea.
+                </p>
+
+                <h3>Key Features</h3>
+                <p>
+                    <strong>1. Real-time Data Visualization</strong>  
+                    Visualize temperature, humidity, and air pollutant levels using interactive charts.
+                </p>
+                <p>
+                    <strong>2. User-friendly Interface</strong>  
+                    A clean and intuitive layout ensures easy navigation and quick access to data.
+                </p>
+                <p>
+                    <strong>3. Interactive Data Filtering</strong>  
+                    Users can select specific cities and districts to view localized environmental data.
+                </p>
+                <p>
+                    <strong>4. Detailed Pollutant Analysis</strong>  
+                    Displays individual air pollutant concentrations such as PM2.5, PM10, NO₂, SO₂, O₃, and CO.
+                </p>
+                <p>
+                    You can access the <strong>full source code</strong> of this website on my GitHub repository. 
+                    The repository contains all implementation details, including HTML, CSS, and JavaScript.
+                </p>
+                <a href="https://github.com/S2je0ng/Final_Project" class="github-link" target="_blank">
+                    View Code on GitHub
+                </a>
+            </div>
+        
+        </main>
+    </div>
+
+    <footer>
+        Data provided by 공공데이터포털 | <a
+            href="https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15057210"> 기상청_지상(종관, ASOS)
+            시간자료 조회서비스 </a> |<a href="https://www.data.go.kr/iim/api/selectAPIAcountView.do"> 한국환경공단_에어코리아_대기오염정보
+        </a> | Made by Sejeong PARK
+    </footer>
+    <script>
+        // 아코디언 기능
+        document.addEventListener("DOMContentLoaded", () => {
+            const accordions = document.querySelectorAll(".accordion");
+
+            accordions.forEach((accordion) => {
+                accordion.addEventListener("click", function () {
+                    const panel = this.nextElementSibling;
+                    const icon = this.querySelector(".icon");
+
+                    if (panel.style.display === "block") {
+                        panel.style.display = "none";
+                        icon.textContent = "v"; // 접힌 상태
+                        this.classList.remove("active");
+                    } else {
+                        panel.style.display = "block";
+                        icon.textContent = "^"; // 펼쳐진 상태
+                        this.classList.add("active");
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Quality</title>
+    <link rel="stylesheet" href="final.css">
+</head>
+
+<style>
+    
+    .accordion {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+        padding: 10px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .accordion:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+        text-decoration: none;
+    }
+
+    .accordion.active {
+        background-color: rgba(255, 255, 255, 0.8);
+        color: steelblue;
+    }
+
+    .accordion .icon {
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    .panel {
+        display: none;
+        padding: 5px 15px;
+        margin-top: 5px;
+    }
+
+    .panel a {
+        display: block;
+        color: #333;
+        text-decoration: none;
+        padding: 5px 0;
+        transition: color 0.3s;
+    }
+
+    .panel a:hover {
+        color: steelblue;
+        font-weight: bold;
+    }
+
+    .city-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0;
+    }
+
+    .city-buttons button {
+        padding: 10px 15px;
+        font-size: 1rem;
+        font-weight: bold;
+        color: white;
+        background-color: steelblue;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .city-buttons button:hover {
+        background-color: #4682b4;
+    }
+
+    .city-buttons button.active {
+        background-color: #2e5c8a;
+    }
+
+
+    table {
+        width: 90%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        text-align: center;
+    }
+
+    th,
+    td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        font-size: 1.1rem;
+    }
+
+    th {
+        background-color: steelblue;
+        color: white;
+        font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    .center {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+</style>
+
+<body>
+    <header>
+        <h1 class="site-title">Air Quality Monitoring</h1>
+    </header>
+
+    <div class="main-container">
+        <aside id="sideMenu">
+            <nav>
+                <ul>
+                    <li><a href="./index.html">HOME</a></li>
+                    <a href="javascript:void(0);" class="accordion">DATA<span class="icon">v</span></a>
+                    <ul class="panel">
+                        <li><a href="temp.html">Temperature</a></li>
+                        <li><a href="airqulity.html" class="active">Air Quality</a></li>
+                    </ul>
+                    </li>
+                    <li><a href="./about.html">ABOUT</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main>
+            <div class="chart-box">
+                <h2 class="center">Regional Air Quality Data</h2>
+
+                <div class="city-buttons" id="cityButtons">
+                    <button data-city="서울" class="active">Seoul</button>
+                    <button data-city="부산">Busan</button>
+                    <button data-city="대구">Daegu</button>
+                    <button data-city="인천">Incheon</button>
+                    <button data-city="광주">Gwangju</button>
+                </div>
+
+
+                <div id="error"></div>
+                <table id="airQualityTable">
+                    <thead>
+                        <tr>
+                            <th>Region</th>
+                            <th>PM10 (㎍/㎥)</th>
+                            <th>PM2.5 (㎍/㎥)</th>
+                            <th>NO₂ (ppm)</th>
+                            <th>SO₂ (ppm)</th>
+                            <th>O₃ (ppm)</th>
+                            <th>CO (ppm)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        Data provided by 공공데이터포털 | <a
+            href="https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15057210"> 기상청_지상(종관, ASOS)
+            시간자료 조회서비스 </a> |<a href="https://www.data.go.kr/iim/api/selectAPIAcountView.do"> 한국환경공단_에어코리아_대기오염정보
+        </a> | Made by Sejeong PARK
+    </footer>
+</body>
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const accordions = document.querySelectorAll(".accordion");
+
+        accordions.forEach((accordion) => {
+            accordion.addEventListener("click", function () {
+                const panel = this.nextElementSibling;
+                const icon = this.querySelector(".icon");
+
+                if (panel.style.display === "block") {
+                    panel.style.display = "none";
+                    icon.textContent = "v";
+                    this.classList.remove("active");
+                } else {
+                    panel.style.display = "block";
+                    icon.textContent = "^";
+                    this.classList.add("active");
+                }
+            });
+        });
+    });
+
+    const serviceKey = "dbXskZIbi2s80pFXM%2BtjJW%2BIjZoGolDZw1Sx4FbEmm86VR0GJcF1tgpxBwGROZTitGqKByf2Duim7WoCWlDERA%3D%3D";
+    const apiUrl = "https://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty";
+
+    const tableBody = document.querySelector("#airQualityTable tbody");
+    const cityButtons = document.querySelectorAll(".city-buttons button");
+
+    async function fetchAirQualityData(city) {
+        tableBody.innerHTML = "";
+
+        const url = `${apiUrl}?serviceKey=${serviceKey}&returnType=json&numOfRows=100&pageNo=1&sidoName=${encodeURIComponent(city)}&ver=1.5`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        const items = data.response.body.items;
+
+        items.forEach(item => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                            <td>${item.stationName || "N/A"}</td>
+                            <td>${item.pm10Value || "N/A"}</td>
+                            <td>${item.pm25Value || "N/A"}</td>
+                            <td>${item.no2Value || "N/A"}</td>
+                            <td>${item.so2Value || "N/A"}</td>
+                            <td>${item.o3Value || "N/A"}</td>
+                            <td>${item.coValue || "N/A"}</td>
+                        `;
+            tableBody.appendChild(row);
+        });
+
+    }
+
+    cityButtons.forEach(button => {
+        button.addEventListener("click", () => {
+            cityButtons.forEach(btn => btn.classList.remove("active"));
+            button.classList.add("active");
+
+            const city = button.dataset.city;
+            fetchAirQualityData(city);
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", () => fetchAirQualityData("서울"));
+</script>
+
+</html>

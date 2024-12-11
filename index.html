@@ -1,72 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Air Quality Monitoring Dashboard</title>
     <link rel="stylesheet" href="final.css">
-    <script src="final.js"></script>
-    <script src="temp.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="airqulitydata.js" defer></script>
+    <script src="temperaturedata.js"></script>
 </head>
+
+<style>
+   
+    .accordion {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+        padding: 10px 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 5px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .accordion:hover {
+        background-color: rgba(255, 255, 255, 0.3);
+        text-decoration: none;
+    }
+
+    .accordion.active {
+        background-color: rgba(255, 255, 255, 0.8);
+        color: steelblue;
+    }
+
+    .accordion .icon {
+        font-size: 1rem;
+        font-weight: bold;
+    }
+
+    .panel {
+        display: none;
+        /* border-left: 3px solid #4682b4; */
+        padding: 5px 15px;
+        margin-top: 5px;
+    }
+
+    .panel a {
+        display: block;
+        color: #333;
+        text-decoration: none;
+        padding: 5px 0;
+        transition: color 0.3s;
+    }
+
+    .panel a:hover {
+        color: steelblue;
+        font-weight: bold;
+    }
+</style>
 
 
 <body>
     <header>
-        <h1>Air Quality Monitoring Dashboard</h1>
-        <nav>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#data">Data</a></li>
-                <li><a href="#about">About</a></li>
-            </ul>
-        </nav>
+        <h1 class="site-title">Air Quality Monitoring</h1>
     </header>
 
-    <main>
-        <div class="selectors">
-            <label for="citySelect">City:</label>
-            <select id="citySelect">
-                <option value="">Select a city</option>
-                <option value="서울">서울</option>
-                <option value="부산">부산</option>
-                <option value="인천">인천</option>
-                <option value="대구">대구</option>
-                <option value="광주">광주</option>
-            </select>
+    <div class="main-container">
+        <aside id="sideMenu">
+            <nav>
+                <ul>
+                    <li><a href="./index.html" class="active">HOME</a></li>
+                    <a href="javascript:void(0);" class="accordion">DATA<span class="icon">v</span></a>
+                    <ul class="panel">
+                        <li><a href="temp.html">Temperature</a></li>
+                        <li><a href="airqulity.html">Air Quality</a></li>
+                    </ul>
+                    </li>
+                    <li><a href="./about.html">ABOUT</a></li>
+                </ul>
+            </nav>
+        </aside>
 
-            <label for="districtSelect">District:</label>
-            <select id="districtSelect" disabled>
-                <option value="">Select a district</option>
-            </select>
 
-        </div>
-        <div class="charts-container">
+        <main>
+            <h2>Regional air quality information search</h2>
 
-            <div class="chart-box">
-                <canvas id="lineChart"></canvas>
+
+            <div class="selectors">
+                <label for="citySelect">City:</label>
+                <select id="citySelect">
+                    <option value="">Choose a city</option>
+                    <option value="서울">서울</option>
+                    <option value="부산">부산</option>
+                    <option value="대구">대구</option>
+                    <option value="인천">인천</option>
+                    <option value="광주">광주</option>
+                </select>
+
+                <label for="districtSelect">District:</label>
+                <select id="districtSelect" disabled>
+                    <option value="">Choose a district</option>
+                </select>
+                <button id="searchBtn" disabled>Search</button>
             </div>
 
-            <div class="chart-box">
-                <canvas id="barChart"></canvas>
+            <div class="layout">
+
+                <div class="info-chart-container">
+                    <div class="info-box">
+                        <h3 class="info-title">Current Weather & Air Quality</h3>
+                        <div class="info-content">
+                            <div class="info-row">
+                                <p>Temperature: <span id="temp">4.6</span>°C&nbsp;</p>
+                                <p>Humidity: <span id="humidity">50</span>%&nbsp;</p>
+                            </div>
+                            <div class="info-row">
+                                <p>Precipitation: <span id="rainfall">0 </span>mm&nbsp;&nbsp;&nbsp;</p>
+                                <p>Wind Speed: <span id="windspeed">1.6</span>m/s&nbsp;</p>
+                            </div>
+                            <div class="info-row">
+                                <p>Air Quality:</p>
+                                <div id="emojiContainer">
+                                    <span>😊</span>
+                                    <span>😐</span>
+                                    <span>😷</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chart-box">
+                        <h3>Temperature & Humidity</h3>
+                        <canvas id="lineChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <h3>Air pollutant level</h3>
+                        <div id="chart">
+                            <canvas id="barChart1"></canvas>
+                            <canvas id="barChart2"></canvas>
+                        </div>
+                        <div class="pollutant-values-container">
+                            <div class="pollutant-box">
+                                <p>PM2.5</p>
+                                <span id="pm25Value" class="pollutant-value"></span>
+                            </div>
+                            <div class="pollutant-box">
+                                <p>PM10</p>
+                                <span id="pm10Value" class="pollutant-value"></span>
+                            </div>
+                            <div class="pollutant-box">
+                                <p>NO₂n</p>
+                                <span id="no2Value" class="pollutant-value"></span>
+                            </div>
+                            <div class="pollutant-box">
+                                <p>SO₂</p>
+                                <span id="so2Value" class="pollutant-value"></span>
+
+                            </div>
+                            <div class="pollutant-box">
+                                <p>O₃</p>
+                                <span id="o3Value" class="pollutant-value"></span>
+                            </div>
+                            <div class="pollutant-box">
+                                <p>CO</p>
+                                <span id="coValue" class="pollutant-value"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-box">
+                        <h3>The distribution of air pollutants</h3>
+                        <div id="chart">
+                            <canvas id="doughnutChart1"></canvas>
+                            <canvas id="doughnutChart2"></canvas>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+        </main>
+        <footer>
+            Data provided by 공공데이터포털 | <a
+                href="https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15057210"> 기상청_지상(종관, ASOS)
+                시간자료 조회서비스 </a> |<a href="https://www.data.go.kr/iim/api/selectAPIAcountView.do"> 한국환경공단_에어코리아_대기오염정보
+            </a> | Made by Sejeong PARK
+        </footer>
 
-            <div class="chart-box small-chart">
-                <canvas id="doughnutChart"></canvas>
-            </div>
+        <script>
 
-        </div>
-    </main>
+            document.addEventListener("DOMContentLoaded", () => {
+                const accordions = document.querySelectorAll(".accordion");
 
-    <footer>
-        <hr/>
-        <p>Data provided by 공공데이터포털</p>
-         <!-- 참고사이트 작성 -->
-         <ul id="cf">
-            <li> <a href="https://www.data.go.kr/tcs/dss/selectApiDataDetailView.do?publicDataPk=15057210"> 기상청_지상(종관, ASOS) 시간자료 조회서비스 </a></li>
-            <li> <a href="https://www.data.go.kr/iim/api/selectAPIAcountView.do"> 한국환경공단_에어코리아_대기오염정보 </a></li>
-        </ul>
-    </footer>
+                accordions.forEach((accordion) => {
+                    accordion.addEventListener("click", function () {
+                        const panel = this.nextElementSibling;
+                        const icon = this.querySelector(".icon");
+
+                        if (panel.style.display === "block") {
+                            panel.style.display = "none";
+                            icon.textContent = "v"; 
+                            this.classList.remove("active");
+                        } else {
+                            panel.style.display = "block";
+                            icon.textContent = "^"; 
+                            this.classList.add("active");
+                        }
+                    });
+                });
+            });
+        </script>
+
 
 </body>
 
